@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "mysynth.h"
 
+#define SECONDS 2.0
+
 void output(float x) {
   putchar (((unsigned char *) &x) [0]);
   putchar (((unsigned char *) &x) [1]);
@@ -10,8 +12,10 @@ void output(float x) {
 }
 
 int main() {
-  for (sample=0; sample<SECONDS*RATE; sample++) {
-    output( note(PEAK, 1.0, 55.0, 1.0) );
+  unsigned int i;
+  for (i=0; i<SECONDS*RATE; i++) {
+    output( mysy_note(SQRE, 1.0, 55.0, 1.0) );
+    mysy_nextSample();
     //printf("%f\n", generator(smp, 1.0, 1.0));
   }
 }

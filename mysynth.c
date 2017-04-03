@@ -5,36 +5,34 @@
 //TODO ADSR, filters, LFO?
 
 float sine_generator(float freq, float amp) {
-  float T = sample / RATE * 2 * M_PI * freq;
+  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
   return sin(T) * amp;
 }
 
 float sawt_generator(float freq, float amp) {
-  // FIXME
-  float T = sample / RATE * 2 * M_PI * freq;
-  return sin(T) * amp;
+  float a = (float)fmod(mysy_sample * freq, RATE) / (float)RATE;
+  return a - 0.5 * amp; // FIXME something went wrong :(
 }
 
 float tria_generator(float freq, float amp) {
   // FIXME
-  float T = sample / RATE * 2 * M_PI * freq;
-  return sin(T) * amp;
+  float a = (float)mysy_sample / RATE * 2 * M_PI * freq;
+  return a * amp;
 }
 
 float sqre_generator(float freq, float amp) {
-  // FIXME
-  float T = sample / RATE * 2 * M_PI * freq;
-  return sin(T) * amp;
+  float a = (sawt_generator(freq, 1.0) > 0.0) ? 1.0 : -1.0;
+  return a * amp;
 }
 
 float mirr_generator(float freq, float amp) {
   // FIXME
-  float T = sample / RATE * 2 * M_PI * freq;
+  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
   return sin(T) * amp;
 }
 
 float peak_generator(float freq, float amp) {
-  float T = sample / RATE * 2 * M_PI * freq;
+  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
   float r = sin(T);
   if (r >  LIMIT) r =  2.0 * LIMIT - r;
   if (r < -LIMIT) r = -2.0 * LIMIT - r;
@@ -46,7 +44,7 @@ float nois_generator(float freq, float amp) {
   return 0.0 * amp;
 }
 
-float note(unsigned char wave, unsigned char leng, float freq, float amp) {
+float mysy_note(unsigned char wave, unsigned char leng, float freq, float amp) {
   generatorDef generatorPtr;
   switch (wave) {
     case (SINE): generatorPtr = &sine_generator; break;
@@ -61,3 +59,6 @@ float note(unsigned char wave, unsigned char leng, float freq, float amp) {
   return (*generatorPtr)(freq, amp);
 }
 
+void mysy_nextSample() {
+  mysy_sample++;
+}
