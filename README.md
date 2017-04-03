@@ -1,6 +1,6 @@
 # mysynth
 
-A simple software sybthesizer.
+A simple software synthesizer.
 
 Waveforms:
   * Sinus	SINE	0
