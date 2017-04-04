@@ -54,7 +54,10 @@ float mysy_note(unsigned char wave, unsigned char leng, float freq, float amp) {
     case (PEAK): generatorPtr = &peak_generator; break;
     case (MIRR): generatorPtr = &mirr_generator; break;
     case (NOIS): generatorPtr = &nois_generator; break;
-    default:  fprintf(stderr, "Error: Unsupported waveform: %d\n", wave);
+    default: {
+      fprintf(stderr, "Error: Unsupported waveform: %d\n", wave);
+      generatorPtr = &sine_generator;
+    }
   }
   return (*generatorPtr)(freq, amp);
 }

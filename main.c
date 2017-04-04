@@ -14,9 +14,10 @@ void output(float x) {
 int main() {
   unsigned int i;
   for (i=0; i<SECONDS*RATE; i++) {
-    output( mysy_note(SQRE, 1.0, 55.0, 1.0) );
+    output( mysy_note(SAWT, 1.0, 55.0, 1.0) );
     mysy_nextSample();
     //printf("%f\n", generator(smp, 1.0, 1.0));
   }
+  return 0;
 }
 
