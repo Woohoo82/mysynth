@@ -4,7 +4,7 @@
 
 #define SECONDS 2.0
 
-void output(float x) {
+void output(s16 x) {
   putchar (((unsigned char *) &x) [0]);
   putchar (((unsigned char *) &x) [1]);
   putchar (((unsigned char *) &x) [2]);
@@ -12,7 +12,7 @@ void output(float x) {
 }
 
 int main() {
-  unsigned int i;
+  u32 i;
   for (i=0; i<SECONDS*RATE; i++) {
     output( mysy_note(SAWT, 1.0, 55.0, 1.0) );
     mysy_nextSample();

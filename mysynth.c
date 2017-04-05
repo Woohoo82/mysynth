@@ -1,50 +1,57 @@
 #include <stdio.h>
-#include <math.h>
+//#include <math.h>
 #include "mysynth.h"
 
 //TODO ADSR, filters, LFO?
 
-float sine_generator(float freq, float amp) {
-  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
-  return sin(T) * amp;
+s16 scale(u16 v, u16 src_Max, u16 trg_min, u16 trg_Max) {
+  v *= trg_Max - trg_min;
+  v /= src_Max;
+  v += trg_min;
+  return v;
 }
 
-float sawt_generator(float freq, float amp) {
-  float a = (float)fmod(mysy_sample * freq, RATE) / (float)RATE;
-  return a - 0.5 * amp; // FIXME something went wrong :(
+s16 sine_generator(s16 freq) {
+  s16 T = (s16)mysy_sample / RATE * 2 * PI * freq;
+  return sin(T);
 }
 
-float tria_generator(float freq, float amp) {
+s16 sawt_generator(s16 freq) {
+  s16 a = scale(mysy_sample, RATE, -1000, 1000);
+  return a;
+}
+
+s16 tria_generator(s16 freq) {
   // FIXME
-  float a = (float)mysy_sample / RATE * 2 * M_PI * freq;
-  return a * amp;
+  s16 a = (s16)mysy_sample / RATE * 2 * PI * freq;
+  return a;
 }
 
-float sqre_generator(float freq, float amp) {
-  float a = (sawt_generator(freq, 1.0) > 0.0) ? 1.0 : -1.0;
-  return a * amp;
+s16 sqre_generator(s16 freq) {
+  s16 a = (sawt_generator(freq) > 0.0) ? 1.0 : -1.0;
+  return a;
 }
 
-float mirr_generator(float freq, float amp) {
+s16 mirr_generator(s16 freq) {
   // FIXME
-  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
-  return sin(T) * amp;
+  s16 T = (s16)mysy_sample / RATE * 2 * PI * freq;
+  return sin(T);
 }
 
-float peak_generator(float freq, float amp) {
-  float T = (float)mysy_sample / RATE * 2 * M_PI * freq;
-  float r = sin(T);
+s16 peak_generator(s16 freq) {
+  s16 T = (s16)mysy_sample / RATE * 2 * PI * freq;
+  s16 r = sin(T);
   if (r >  LIMIT) r =  2.0 * LIMIT - r;
   if (r < -LIMIT) r = -2.0 * LIMIT - r;
-  return r * amp;
+  return r;
 }
 
-float nois_generator(float freq, float amp) {
+s16 nois_generator(s16 freq) {
   // FIXME do gen
-  return 0.0 * amp;
+  return 0.0;
 }
 
-float mysy_note(unsigned char wave, unsigned char leng, float freq, float amp) {
+s16 mysy_note(u8 wave, u8 leng, s16 freq, s16 amp) {
   generatorDef generatorPtr;
   switch (wave) {
     case (SINE): generatorPtr = &sine_generator; break;
@@ -59,7 +66,7 @@ float mysy_note(unsigned char wave, unsigned char leng, float freq, float amp) {
       generatorPtr = &sine_generator;
     }
   }
-  return (*generatorPtr)(freq, amp);
+  return (*generatorPtr)(freq) * amp;
 }
 
 void mysy_nextSample() {

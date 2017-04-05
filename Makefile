@@ -11,7 +11,7 @@ $(PROG): $(SRC)
 	gcc -o $@ $^ $(CFLAGS) $(LIBS)
 
 debug: $(SRC)
-	gcc -o $(PROG) $^ $(DBGOPT) $(CFLAGS) $(LIBS)
+	gcc -o $(PROG) $^ $(DBGOPT) $(CFLAGS) $(LIBS) -O0
 
 strip:
 	strip -s $(PROG)
