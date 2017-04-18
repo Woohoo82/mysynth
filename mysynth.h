@@ -30,9 +30,10 @@
 #define PI	3.14159
 
 u16  		mysy_sample;
-typedef s16 (*generatorDef)(s16);
+typedef float (*generatorDef)(float);
 
-s16  mysy_note(u8 wave, u8 leng, s16 freq, s16 amp);
-void mysy_nextSample(void);
+float mysy_note(u8 wave, u8 leng, float freq, float amp);
+void  mysy_nextSample(void);
 
 #endif // __MYSYNTH_H__
+

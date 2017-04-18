@@ -17,7 +17,7 @@ strip:
 	strip -s $(PROG)
 
 run:
-	./$(PROG) > raw.bin
+	./$(PROG)
 
 clean:
 	rm $(PROG)

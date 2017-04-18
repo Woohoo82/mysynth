@@ -4,20 +4,21 @@
 
 #define SECONDS 2.0
 
-void output(s16 x) {
-  putchar (((unsigned char *) &x) [0]);
-  putchar (((unsigned char *) &x) [1]);
-  putchar (((unsigned char *) &x) [2]);
-  putchar (((unsigned char *) &x) [3]);
+void writeFloat(float v, FILE *f) {
+  fwrite((void*)(&v), sizeof(v), 1, f);
 }
 
 int main() {
+  FILE *binary_file = fopen("raw.bin","wb");
+
   u32 i;
   for (i=0; i<SECONDS*RATE; i++) {
-    output( mysy_note(SAWT, 1.0, 55.0, 1.0) );
+    writeFloat( mysy_note(SAWT, 1.0, 55.0, 1.0), binary_file );
     mysy_nextSample();
-    //printf("%f\n", generator(smp, 1.0, 1.0));
   }
+
+  fclose(binary_file);
+
   return 0;
 }
 
